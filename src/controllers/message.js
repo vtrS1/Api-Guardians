@@ -1,16 +1,26 @@
 import { Message } from "../models";
+import * as Yup from "yup";
 
 class MessageController {
   async create(req, res) {
-    const message = new Message({
-      titulo: "Aprendiz",
-      descricao:
-        "Ola candidato marabilhoso, hoe é o dia mais feliz da sua vida, chegou a data da sua integração",
-    });
+    try {
+      const message = Yup.object().shape({
+        titulo: Yup.string().required("Campo obrigatório"),
+        descricao: Yup.string().required("Descrição obrigatória"),
+      });
 
-    await message.save();
+      await message.validate(req.body);
 
-    res.json({ message });
+      const messages = new Message({
+        ...req.body,
+      });
+
+      await messages.save();
+
+      res.json({ messages });
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
   }
 }
 

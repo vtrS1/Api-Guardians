@@ -1,11 +1,13 @@
 import db from "./src/models";
 import express from "express";
-const app = express();
 import UserController from "./src/controllers/user";
 import GuardiansController from "./src/controllers/guardians";
 import GuardedController from "./src/controllers/guarded";
 import MessageController from "./src/controllers/message";
 import TagsController from "./src/controllers/tags";
+const app = express();
+
+app.use(express.json());
 
 app.post("/AddGuarded", GuardedController.create);
 app.post("/AddUsers", UserController.create);
