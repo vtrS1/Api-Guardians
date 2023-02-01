@@ -1,21 +1,12 @@
 import * as dotenv from "dotenv";
 import db from "./src/models";
 import express from "express";
-import UserController from "./src/controllers/user";
-import GuardiansController from "./src/controllers/guardians";
-import GuardedController from "./src/controllers/guarded";
-import MessageController from "./src/controllers/message";
-import TagsController from "./src/controllers/tags";
+import routes from "./src/routes";
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.post("/Login", UserController.login);
-app.post("/AddGuarded", GuardedController.create);
-app.post("/AddUsers", UserController.create);
-app.post("/AddGuardians", GuardiansController.create);
-app.post("/AddMessage", MessageController.create);
-app.post("/AddTags", TagsController.create);
+app.use(routes);
 
 app.listen(3000, async () => {
   try {
