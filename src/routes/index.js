@@ -12,6 +12,8 @@ const routes = new Router();
 //User
 routes.post("/login", UserController.login);
 routes.post("/addUsers", UserController.create);
+routes.post("/forgot-password", UserController.forgotPassword);
+routes.post("/reset-password", UserController.resetPassword);
 //Guardian
 routes.post("/addGuardians", GuardiansController.create);
 //Guarded
