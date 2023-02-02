@@ -67,6 +67,8 @@ class UserController {
         numerotel: Yup.string().required("Número de telefone é obrigatório"),
       });
 
+      await users.validate(req.body);
+
       const existedUser = await User.findOne({
         where: { email: req.body.email },
       });
@@ -74,8 +76,6 @@ class UserController {
       if (existedUser) {
         return res.status(401).json({ error: "Usuário já cadastrado" });
       }
-
-      await users.validate(req.body);
 
       const hashPassword = await bcrypt.hash(req.body.password, 8);
 
@@ -121,7 +121,7 @@ class UserController {
       await schema.validate(req.body);
 
       const user = await User.findOne({ where: { email: req.body.email } });
-
+      Novaera2022;
       if (!user) {
         return res.status(404).json({ error: "Usuário não existe" });
       }
@@ -233,6 +233,46 @@ class UserController {
       }
 
       return res.json(user);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
+
+  async updateUser(req, res) {
+    try {
+      const schema = Yup.object().shape({
+        name: Yup.string().min(3, "Nome deve conter ao menos 3 caracteres"),
+        email: Yup.string().email("E-mail inválido"),
+        password: Yup.string().min(
+          6,
+          "Senha deve conter ao menos 6 caracteres."
+        ),
+      });
+
+      await schema.validate(req.body);
+      const { name, email, password } = req.body;
+
+      const user = await User.findByPk(req.userId);
+
+      if (!user) {
+        return res.status(404).json({ error: "Usuário não encontrado" });
+      }
+
+      if (name) {
+        user.name = name;
+      }
+
+      if (email) {
+        user.email = email;
+      }
+
+      if (password) {
+        user.password_hash = await bcrypt.hash(password, 8);
+      }
+
+      await user.save();
+
+      return res.json({ user });
     } catch (error) {
       return res.status(400).json({ error: error?.message });
     }
