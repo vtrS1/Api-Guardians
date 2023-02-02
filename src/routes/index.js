@@ -14,10 +14,16 @@ routes.post("/login", UserController.login);
 routes.post("/addUsers", UserController.create);
 routes.post("/forgot-password", UserController.forgotPassword);
 routes.post("/reset-password", UserController.resetPassword);
+routes.get("/finduser", UserController.getAll);
+routes.get("/userdetails/:id", UserController.userDetails);
 //Guardian
 routes.post("/addGuardians", GuardiansController.create);
+routes.get("/findguardians", GuardiansController.getAll);
+routes.get("/guardiandetails/:id", GuardiansController.guardianDetails);
 //Guarded
 routes.post("/addGuarded", GuardedController.create);
+routes.get("/findguarded", GuardedController.getAll);
+routes.get("/guardeddetails/:id", GuardedController.guardedDetails);
 //Message
 routes.post("/addMessage", MessageController.create);
 //Tags

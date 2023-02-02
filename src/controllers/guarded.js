@@ -32,6 +32,37 @@ class GuardedController {
       res.status(400).json({ error: error?.message });
     }
   }
+  async getAll(req, res) {
+    try {
+      const guarded = await Guarded.findAll({
+        order: [["name", "ASC"]],
+      });
+
+      return res.json(guarded);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
+
+  async guardedDetails(req, res) {
+    try {
+      if (!req.params.id) {
+        return res.status(400).json({ error: "Id não fornecido" });
+      }
+
+      const guarded = await Guarded.findOne({
+        where: { id: Number(req.params.id) },
+      });
+
+      if (!guarded) {
+        return res.status(400).json({ error: "Usuário não encontrado" });
+      }
+
+      return res.json(guarded);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
 }
 
 export default new GuardedController();

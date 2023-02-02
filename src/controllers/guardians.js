@@ -32,6 +32,37 @@ class GuardiansController {
       return res.status(400).json({ error: error?.message });
     }
   }
+  async getAll(req, res) {
+    try {
+      const guardian = await Guardians.findAll({
+        order: [["name", "ASC"]],
+      });
+
+      return res.json(guardian);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
+
+  async guardianDetails(req, res) {
+    try {
+      if (!req.params.id) {
+        return res.status(400).json({ error: "Id não fornecido" });
+      }
+
+      const guardian = await Guardians.findOne({
+        where: { id: Number(req.params.id) },
+      });
+
+      if (!guardian) {
+        return res.status(400).json({ error: "Guardião não encontrado" });
+      }
+
+      return res.json(guardian);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
 }
 
 export default new GuardiansController();

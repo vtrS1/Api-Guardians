@@ -208,6 +208,35 @@ class UserController {
       return res.status(400).json({ error: error?.message });
     }
   }
+  async getAll(req, res) {
+    try {
+      const user = await User.findAll({
+        order: [["name", "ASC"]],
+      });
+
+      return res.json(user);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
+
+  async userDetails(req, res) {
+    try {
+      if (!req.params.id) {
+        return res.status(400).json({ error: "Id não fornecido" });
+      }
+
+      const user = await User.findOne({ where: { id: Number(req.params.id) } });
+
+      if (!user) {
+        return res.status(400).json({ error: "Usuário não encontrado" });
+      }
+
+      return res.json(user);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
 }
 
 export default new UserController();
