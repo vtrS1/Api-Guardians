@@ -1,3 +1,4 @@
+import { Guardians } from "../models";
 import { Guarded } from "../models";
 import * as Yup from "yup";
 
@@ -36,6 +37,12 @@ class GuardedController {
     try {
       const guarded = await Guarded.findAll({
         order: [["name", "ASC"]],
+        include: [
+          {
+            model: Guardians,
+            as: "guardian",
+          },
+        ],
       });
 
       return res.json(guarded);
