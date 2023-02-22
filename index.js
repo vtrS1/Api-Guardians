@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(routes);
 
-app.listen(3000, async () => {
+app.listen(3333, async () => {
   try {
     await db.sequelize.authenticate();
     console.log("Connection has been established successfully.");

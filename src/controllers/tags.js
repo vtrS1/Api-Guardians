@@ -24,6 +24,38 @@ class TagsController {
       return res.status(400).json({ error: error?.message });
     }
   }
+
+  async getAll(req, res) {
+    try {
+      const tag = await Tags.findAll({
+        order: [["tag", "ASC"]],
+      });
+
+      return res.json(tag);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
+
+  async tagsDetails(req, res) {
+    try {
+      if (!req.params.id) {
+        return res.status(400).json({ error: "Id não fornecido" });
+      }
+
+      const tag = await Tags.findOne({
+        where: { id: Number(req.params.id) },
+      });
+
+      if (!tag) {
+        return res.status(400).json({ error: "Tag não encontrada" });
+      }
+
+      return res.json(tag);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
 }
 
 export default new TagsController();

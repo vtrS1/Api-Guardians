@@ -30,7 +30,11 @@ routes.get("/findguarded", GuardedController.getAll);
 routes.get("/guardeddetails/:id", GuardedController.guardedDetails);
 
 routes.post("/addMessage", MessageController.create);
+routes.get("/findmessages", MessageController.getAll);
+routes.get("/messagedetails/:id", MessageController.messageDetails);
 
 routes.post("/addTags", TagsController.create);
+routes.get("/findtags", TagsController.getAll);
+routes.get("/tagsdetails/:id", TagsController.tagsDetails);
 
 export default routes;
