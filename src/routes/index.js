@@ -28,6 +28,8 @@ routes.get("/guardiandetails/:id", GuardiansController.guardianDetails);
 routes.post("/addGuarded", GuardedController.create);
 routes.get("/findguarded", GuardedController.getAll);
 routes.get("/guardeddetails/:id", GuardedController.guardedDetails);
+routes.post("/sendsms", GuardedController.sendMessage);
+routes.post("/changed-guardian", GuardedController.changedGuardian);
 
 routes.post("/addMessage", MessageController.create);
 routes.get("/findmessages", MessageController.getAll);

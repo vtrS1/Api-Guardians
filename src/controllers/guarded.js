@@ -1,6 +1,8 @@
 import { Guardians } from "../models";
 import { Guarded } from "../models";
 import * as Yup from "yup";
+import Sms from "../libs/Sms";
+import guardians from "./guardians";
 
 class GuardedController {
   async create(req, res) {
@@ -66,6 +68,73 @@ class GuardedController {
       }
 
       return res.json(guarded);
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
+
+  async sendMessage(req, res) {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.number().required("Id do Usuário é obrigatório"),
+        message: Yup.string().required(),
+      });
+
+      await schema.validate(req.body);
+
+      const message = req.body.message;
+
+      const user = await Guarded.findOne({ where: { id: req.body.id } });
+
+      const guardian = await Guardians.findOne({
+        where: { id: user.guardiansid },
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: "Usuário não existe" });
+      }
+
+      const { name, numerotel } = user;
+
+      const smsResult = await Sms.SendSms(
+        name,
+        numerotel,
+        message,
+        guardian.name
+      );
+
+      if (smsResult?.error) {
+        return res.status(400).json({ error: "E-mail Não enviado" });
+      }
+
+      return res.json("Sms enviado com sucesso");
+    } catch (error) {
+      return { error };
+    }
+  }
+
+  async changedGuardian(req, res) {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.number().required("Id é obrigatório"),
+        guardiansid: Yup.number().required("Id Guardian é obrigatório"),
+      });
+
+      await schema.validate(req.body);
+
+      const user = await Guarded.findOne({ where: { id: req.body.id } });
+
+      if (!user) {
+        return res.status(404).json({ error: "Usuário não existe!" });
+      }
+
+      const newguardian = req.body.guardiansid;
+
+      await user.update({
+        guardiansid: newguardian,
+      });
+
+      return res.status(200).json({ success: true });
     } catch (error) {
       return res.status(400).json({ error: error?.message });
     }
