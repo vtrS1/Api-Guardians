@@ -10,13 +10,21 @@ const api = axios.create({
 });
 
 class SendSms {
-  async SendSmsRequest(name, numerotel, message, guardian) {
+  async SendSmsRequest(name, numerotel, message, guardian, tag) {
     try {
       api
         .post("/send", {
           Sender: "Nova Era",
-          Receivers: "phone_number",
-          Content: "message",
+          Receivers: numerotel,
+          Content:
+            "Olá " +
+            name +
+            " , " +
+            message +
+            " Endereço " +
+            tag +
+            " . Procure seu Guardião: " +
+            guardian,
         })
         .then(function (response) {
           console.log(response);

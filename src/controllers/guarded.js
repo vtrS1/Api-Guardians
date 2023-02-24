@@ -78,11 +78,10 @@ class GuardedController {
       const schema = Yup.object().shape({
         id: Yup.number().required("Id do Usuário é obrigatório"),
         message: Yup.string().required(),
+        tag: Yup.string().required(),
       });
 
       await schema.validate(req.body);
-
-      const message = req.body.message;
 
       const user = await Guarded.findOne({ where: { id: req.body.id } });
 
@@ -99,8 +98,9 @@ class GuardedController {
       const smsResult = await Sms.SendSmsRequest(
         name,
         numerotel,
-        message,
-        guardian.name
+        req.body.message,
+        guardian.name,
+        req.body.tag
       );
 
       if (smsResult?.error) {
