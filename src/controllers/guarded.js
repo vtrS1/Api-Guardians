@@ -96,7 +96,7 @@ class GuardedController {
 
       const { name, numerotel } = user;
 
-      const smsResult = await Sms.SendSms(
+      const smsResult = await Sms.SendSmsRequest(
         name,
         numerotel,
         message,
