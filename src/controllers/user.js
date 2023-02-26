@@ -121,7 +121,6 @@ class UserController {
       await schema.validate(req.body);
 
       const user = await User.findOne({ where: { email: req.body.email } });
-      Novaera2022;
       if (!user) {
         return res.status(404).json({ error: "Usuário não existe" });
       }
