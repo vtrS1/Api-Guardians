@@ -1,38 +1,21 @@
-import axios from "axios";
+import NodeMailJet from "node-mailjet";
 
-const api = axios.create({
-  baseURL: "https://sms.comtele.com.br/api/v2",
-  timeout: 1000,
-  headers: {
-    "content-type": "application/json",
-    "auth-key": "b10c6ab7-a126-4f75-b6bd-b9735d10af50",
-  },
-});
+const mailjet = NodeMailJet.smsConnect(process.env.MJ_TOKEN);
 
-class SendSms {
-  async SendSmsRequest(name, numerotel, message, guardian, tag) {
+class Sms {
+  async sendSms(name, numerotel, message, guardian) {
     try {
-      api
-        .post("/send", {
-          Sender: "Nova Era",
-          Receivers: numerotel,
-          Content:
-            "Olá " +
-            name +
-            " , " +
-            message +
-            " Endereço " +
-            tag +
-            " . Procure seu Guardião: " +
-            guardian,
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    } catch (error) {}
+      const result = mailjet.post("sms-send", { version: "v4" }).request({
+        From: "Nova Era",
+        To: "+55" + numerotel,
+        Text:
+          "Olá, " + name + " " + message + " Procure seu Guardião: " + guardian,
+      });
+      console.log({ result });
+    } catch (error) {
+      return { error };
+    }
   }
 }
-export default new SendSms();
+
+export default new Sms();

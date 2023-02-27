@@ -78,33 +78,31 @@ class GuardedController {
       const schema = Yup.object().shape({
         id: Yup.number().required("Id do Usuário é obrigatório"),
         message: Yup.string().required(),
-        tag: Yup.string().required(),
       });
 
       await schema.validate(req.body);
 
       const user = await Guarded.findOne({ where: { id: req.body.id } });
 
-      const guardian = await Guardians.findOne({
-        where: { id: user.guardiansid },
-      });
-
       if (!user) {
         return res.status(404).json({ error: "Usuário não existe" });
       }
 
+      const guardian = await Guardians.findOne({
+        where: { id: user.guardiansid },
+      });
+
       const { name, numerotel } = user;
 
-      const smsResult = await Sms.SendSmsRequest(
+      const smsResult = await Sms.sendSms(
         name,
         numerotel,
         req.body.message,
-        guardian.name,
-        req.body.tag
+        guardian.name
       );
 
       if (smsResult?.error) {
-        return res.status(400).json({ error: "E-mail Não enviado" });
+        return res.status(400).json({ error: "Sms Não enviado" });
       }
 
       return res.json("Sms enviado com sucesso");
