@@ -2,25 +2,25 @@
   "development": {
     "username": "postgres",
     "password": "qaz123#@!",
-    "database": "guardioesnovaera",
+    "database": "ipa",
     "host": "10.0.200.200",
-    "port": "5451",
+    "port": "5453",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
     "password": "qaz123#@!",
-    "database": "guardioesnovaera",
+    "database": "ipa",
     "host": "10.0.200.200",
-    "port": "5451",
+    "port": "5453",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
     "password": "qaz123#@!",
-    "database": "guardioesnovaera",
+    "database": "ipa",
     "host": "10.0.200.200",
-    "port": "5451",
+    "port": "5453",
     "dialect": "postgres"
   }
 }
