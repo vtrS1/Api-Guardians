@@ -12,18 +12,21 @@ const routes = new Router();
 routes.post("/login", UserController.login);
 routes.post("/forgot-password", UserController.forgotPassword);
 routes.post("/reset-password", UserController.resetPassword);
-routes.post("/addUsers", UserController.create);
+
 //----> Authenticated routes
 routes.use(authMiddleware);
 
 routes.get("/user", UserController.get);
 routes.put("/user", UserController.updateUser);
-routes.get("/finduser", UserController.getAll);
 routes.get("/userdetails/:id", UserController.userDetails);
+routes.post("/addUsers", UserController.create);
+routes.get("/finduser", UserController.getAll);
+routes.put("/userUpdate", UserController.changedRegisterUser);
 
 routes.post("/addGuardians", GuardiansController.create);
-routes.get("/findguardians", GuardiansController.getAll);
 routes.get("/guardiandetails/:id", GuardiansController.guardianDetails);
+routes.put("/guardianUpdate", GuardiansController.changedRegisterGuardian);
+routes.get("/findguardians", GuardiansController.getAll);
 
 routes.post("/addGuarded", GuardedController.create);
 routes.get("/findguarded", GuardedController.getAll);
@@ -34,6 +37,7 @@ routes.post("/changed-guardian", GuardedController.changedGuardian);
 routes.post("/addMessage", MessageController.create);
 routes.get("/findmessages", MessageController.getAll);
 routes.get("/messagedetails/:id", MessageController.messageDetails);
+routes.get("/updateMessage", MessageController.changedRegisterMessage);
 
 routes.post("/addTags", TagsController.create);
 routes.get("/findtags", TagsController.getAll);

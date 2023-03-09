@@ -54,6 +54,37 @@ class MessageController {
       return res.status(400).json({ error: error?.message });
     }
   }
+
+  async changedRegisterMessage(req, res) {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.number().required("Id é obrigatório"),
+        name: Yup.string(),
+        email: Yup.string().email("E-mail inválido"),
+        password: Yup.string(),
+      });
+
+      await schema.validate(req.body);
+
+      const user = await Message.findOne({ where: { id: req.body.id } });
+
+      if (!user) {
+        return res.status(404).json({ error: "Usuário não existe!" });
+      }
+
+      await user.update({
+        id: req?.body.id,
+        titulo: req?.body.titulo,
+        descricao: req?.body.descricao,
+      });
+
+      await user.save();
+
+      return res.status(200).json({ success: "Mensagem Alterada Com Sucesso" });
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
 }
 
 export default new MessageController();

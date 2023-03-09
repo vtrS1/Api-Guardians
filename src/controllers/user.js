@@ -276,6 +276,37 @@ class UserController {
       return res.status(400).json({ error: error?.message });
     }
   }
+
+  async changedRegisterUser(req, res) {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.number().required("Id é obrigatório"),
+        name: Yup.string(),
+        email: Yup.string().email("E-mail inválido"),
+        password: Yup.string(),
+      });
+
+      await schema.validate(req.body);
+
+      const user = await User.findOne({ where: { id: req.body.id } });
+
+      if (!user) {
+        return res.status(404).json({ error: "Usuário não existe!" });
+      }
+
+      await user.update({
+        id: req?.body.id,
+        name: req?.body.name,
+        email: req?.body.email,
+      });
+
+      await user.save();
+
+      return res.status(200).json({ success: "Usuário Alterado Com Sucesso" });
+    } catch (error) {
+      return res.status(400).json({ error: error?.message });
+    }
+  }
 }
 
 export default new UserController();
